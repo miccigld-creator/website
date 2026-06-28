@@ -95,10 +95,30 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #555;
-            border: 1px solid #333;
             aspect-ratio: 16 / 9;
             position: relative;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            transition:
+            transform .3s,
+            box-shadow .3s;
+        }
+
+        .card-1 {
+            background-image: url("01.avif");
+        }
+
+        .card-2 {
+            background-image: url("02.avif");
+        }
+
+        .card-3 {
+            background-image: url("03.avif");
+        }
+
+        .card-4 {
+            background-image: url("04.avif");
         }
 
         .play-overlay {
@@ -112,6 +132,12 @@
             justify-content: center;
             backdrop-filter: blur(5px);
             transition: opacity 0.3s ease;
+        }
+
+        .play-overlay img {
+            position: absolute;
+            width: 32px;
+            height: 32px;
         }
 
 
@@ -220,18 +246,23 @@
     </header>
 
     <main class="portfolio-canvas">
-        <div class="portfolio-card" style="background-image: url('project1.jpg');">
+       <div class="portfolio-card card-1">
             <div class="play-overlay">
                 <img src="play-icon.svg" alt="contact">
             </div>
         </div>
-        <div class="portfolio-card">            <div class="play-overlay">
+        <div class="portfolio-card card-2">
+            <div class="play-overlay">
                 <img src="play-icon.svg" alt="contact">
-            </div></div>
-        <div class="portfolio-card">            <div class="play-overlay">
+            </div>
+        </div>
+        <div class="portfolio-card card-3">
+            <div class="play-overlay">
                 <img src="play-icon.svg" alt="contact">
-            </div></div>
-        <div class="portfolio-card">            <div class="play-overlay">
+            </div>
+        </div>
+        <div class="portfolio-card card-4">
+            <div class="play-overlay">
                 <img src="play-icon.svg" alt="contact">
             </div></div>
     </main>
