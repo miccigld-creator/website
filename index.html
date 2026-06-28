@@ -140,6 +140,34 @@
             height: 32px;
         }
 
+        dialog {
+            border: none;
+            padding: 0;
+            background: #000;
+            max-width: 900px;
+            width: 90%;
+            margin: auto;
+        }
+
+        dialog::backdrop {
+            background: rgba(0, 0, 0, 0.85); /* Darkens background */
+        }
+
+        #close-modal {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: transparent;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 20px;
+        }
+
+        video {
+            width: 100%;
+            display: block;
+        }
 
         /* 600px - 767px (Tablet Compact) */
         @media (min-width: 600px) {
@@ -246,22 +274,22 @@
     </header>
 
     <main class="portfolio-canvas">
-       <div class="portfolio-card card-1">
+       <div class="portfolio-card card-1" data-video="https://res.cloudinary.com/dtvb8gznn/video/upload/v1782610059/Skin_Ceuticals_Final_x3lg2e.mp4">
             <div class="play-overlay">
                 <img src="play-icon.svg" alt="contact">
             </div>
         </div>
-        <div class="portfolio-card card-2">
+        <div class="portfolio-card card-2" data-video="https://res.cloudinary.com/dtvb8gznn/video/upload/v1782609555/Blas-final-with-sound_lc0dz7.mp4">
             <div class="play-overlay">
                 <img src="play-icon.svg" alt="contact">
             </div>
         </div>
-        <div class="portfolio-card card-3">
+        <div class="portfolio-card card-3" data-video="https://res.cloudinary.com/dtvb8gznn/video/upload/v1782610530/Tata-Harper-Cream-Final_pshwga.mp4">
             <div class="play-overlay">
                 <img src="play-icon.svg" alt="contact">
             </div>
         </div>
-        <div class="portfolio-card card-4">
+        <div class="portfolio-card card-4" data-video="https://res.cloudinary.com/dtvb8gznn/video/upload/v1782610018/Estee_Lauder_Final_Louder_Music_txdhw6.mp4">
             <div class="play-overlay">
                 <img src="play-icon.svg" alt="contact">
             </div></div>
@@ -273,5 +301,43 @@
         <div>&copy; 2026</div>
         </div>
     </footer>
+    <!-- Video Modal -->
+<dialog id="video-modal">
+    <button id="close-modal">✕</button>
+    <video id="modal-video" controls>
+        <source id="video-source" src="" type="video/mp4">
+    </video>
+</dialog>
+<script>
+    const modal = document.getElementById('video-modal');
+    const closeBtn = document.getElementById('close-modal');
+    const video = document.getElementById('modal-video');
+    const videoSource = document.getElementById('video-source');
+
+    document.querySelectorAll('.portfolio-card').forEach(card => {
+        card.addEventListener('click', () => {
+            // Get the URL from the clicked card
+            const videoUrl = card.getAttribute('data-video');
+            
+            // Set the new source and load it
+            videoSource.setAttribute('src', videoUrl);
+            video.load(); 
+            
+            modal.showModal();
+            video.play();
+        });
+    });
+
+    function closeModal() {
+        video.pause();
+        video.currentTime = 0;
+        modal.close();
+    }
+
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+</script>
 </body>
 </html>
