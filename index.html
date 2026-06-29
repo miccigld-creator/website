@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portfolio Layout</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -29,6 +30,48 @@
             align-items: center;
             justify-content: space-between;
             width: 100%;          
+        }
+
+        h2 {
+            margin-bottom: 16px;
+        }
+
+        .about-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        .avatar {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;  /* Ensures image doesn't stretch */
+        }
+
+        /* Optional: spacing for the h3 */
+        .about-header h3 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 500;
+        }
+
+        .about-container {
+            display: flex;
+            align-items: flex-start; /* Aligns avatar to the top of the text */
+            gap: 24px;
+            margin-top: 24px;
+        }
+
+        .about-text h3 {
+            margin: 0 0 10px 0; /* Creates space between name and description */
+            font-size: 24px;
+            font-weight: 500;
+        }
+
+        .about-text p {
+            margin: 0;
+            line-height: 1.5;
         }
 
         .header-buttons {
@@ -161,20 +204,44 @@
             background: rgba(0, 0, 0, 0.85); /* Darkens background */
         }
 
-        #close-modal {
+        .text-dialog {
+            background-color: #0A0A0A;
+            color: #EFEFEF;
+            border: 1px solid #333;
+            padding: 16px;
+            max-width: 800px;
+            max-height: 1200px;
+            width: 90%;
+            border-radius: 20px;
+        }
+
+        /* Form Styling inside Dialog */
+        .text-dialog input, .text-dialog textarea {
+            width: 100%;
+            margin-bottom: 16px;
+            padding: 12px;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            font-color: #EFEFEF;
+            color: #EFEFEF;
+        }
+
+        .close-modal-btn {
             position: absolute;
             top: 10px;
-            right: 10px;
+            right: 20px;
             background: transparent;
             color: white;
             border: none;
             cursor: pointer;
-            font-size: 20px;
+            font-size: 24px;
+            z-index: 10; /* Ensures it sits above other elements */
         }
 
         video {
             width: 100%;
             display: block;
+            aspect-ratio: 16 / 9;
         }
 
         #video-modal {
@@ -279,8 +346,10 @@
             .portfolio-card:hover .play-overlay {
                 opacity: 1;
             }
- 
-        }
+
+            .text-dialog {
+                padding: 40px;
+            }
     </style>
 </head>
 <body>
@@ -331,7 +400,7 @@
 
     <!-- Video Modal -->
 <dialog id="video-modal">
-    <button id="close-modal">✕</button>
+    <button class="close-modal-btn">✕</button>
     
     <!-- Navigation Buttons -->
     <button id="prev-btn" class="nav-btn">←</button>
@@ -343,9 +412,38 @@
     <button id="next-btn" class="nav-btn">→</button>
 </dialog>
 
+<!-- Contact Dialog -->
+<dialog id="contact-modal" class="text-dialog">
+    <button class="close-modal-btn">✕</button>
+    <h2>Contact</h2>
+    <form name="contact" method="POST" data-netlify="true">
+        <input type="text" name="name" placeholder="Name" required>
+        <input type="email" name="email" placeholder="Email" required>
+        <textarea name="message" placeholder="Message" rows="5"></textarea>
+        <button type="submit" class="btn-solid">Send</button>
+    </form>
+</dialog>
+
+<dialog id="about-modal" class="text-dialog">
+    <button class="close-modal-btn">✕</button>
+    <h2>About Me</h2>
+    
+        <div class="about-container">
+            <img src="avatar.png" alt="Avatar" class="avatar">
+            <div class="about-text">
+                <h3>Miki G</h3>
+                <p>High-impact visuals for beauty brands.</br></br>
+                    With a foundation in photography and graphic design, I approach CGI through the principles of light,
+                    composition, and visual clarity.</br>
+                    Every image and animation is designed to present products with high level of precision and elegance.
+                </p>
+            </div>
+        </div>
+
+</dialog>
+
 <script>
     const modal = document.getElementById('video-modal');
-    const closeBtn = document.getElementById('close-modal');
     const video = document.getElementById('modal-video');
     const videoSource = document.getElementById('video-source');
     const cards = Array.from(document.querySelectorAll('.portfolio-card'));
@@ -359,7 +457,7 @@
         video.play();
     }
 
-    // Open modal and set index
+    // 1. Open video modal
     cards.forEach((card, index) => {
         card.addEventListener('click', () => {
             loadVideo(index);
@@ -368,31 +466,61 @@
         });
     });
 
-    // Integrated Close Logic
-    function closeModal() {
-        video.pause();
-        video.currentTime = 0;
-        modal.close();
-        document.body.classList.remove('no-scroll');
+    // 2. Header triggers (Contact & About)
+    const contactModal = document.getElementById('contact-modal');
+    const aboutModal = document.getElementById('about-modal');
+    
+    // Assuming the first button is Contact and second is About
+    const buttons = document.querySelectorAll('.header-buttons button');
+    if(buttons.length >= 2) {
+        buttons[0].addEventListener('click', () => {
+            contactModal.showModal();
+            document.body.classList.add('no-scroll');
+        });
+        buttons[1].addEventListener('click', () => {
+            aboutModal.showModal();
+            document.body.classList.add('no-scroll');
+        });
     }
 
-    // Navigation logic
-    document.getElementById('next-btn').addEventListener('click', () => {
+    // 3. Unified Close Logic for ALL modals
+    document.querySelectorAll('.close-modal-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const activeModal = e.target.closest('dialog');
+            if (activeModal.id === 'video-modal') {
+                video.pause();
+                video.currentTime = 0;
+            }
+            activeModal.close();
+            document.body.classList.remove('no-scroll');
+        });
+    });
+
+    // 4. Unified Backdrop Close for all except contact-modal
+    document.querySelectorAll('dialog').forEach(m => {
+        m.addEventListener('click', (e) => {
+            if (e.target === m && m.id !== 'contact-modal') {
+                if (m.id === 'video-modal') {
+                    video.pause();
+                    video.currentTime = 0;
+                }
+                m.close();
+                document.body.classList.remove('no-scroll');
+            }
+        });
+    });
+
+    // 5. Navigation logic
+    document.getElementById('next-btn').addEventListener('click', (e) => {
+        e.stopPropagation();
         let nextIndex = (currentIndex + 1) % cards.length;
         loadVideo(nextIndex);
     });
 
-    document.getElementById('prev-btn').addEventListener('click', () => {
+    document.getElementById('prev-btn').addEventListener('click', (e) => {
+        e.stopPropagation();
         let prevIndex = (currentIndex - 1 + cards.length) % cards.length;
         loadVideo(prevIndex);
-    });
-
-    // Close on button click
-    closeBtn.addEventListener('click', closeModal);
-
-    // Close when clicking the backdrop
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) closeModal();
     });
 </script>
 </body>
