@@ -222,7 +222,6 @@
             padding: 12px;
             background: #1a1a1a;
             border: 1px solid #333;
-            font-color: #EFEFEF;
             color: #EFEFEF;
         }
 
@@ -350,12 +349,13 @@
             .text-dialog {
                 padding: 40px;
             }
+        }
     </style>
 </head>
 <body>
     <header class="header">
         <div class="content-wrapper">
-        <div class="header-headline">Cheap products don't need 3D. Yours do.</div>
+        <div class="header-headline">Product visuals for beauty brands.</div>
             <div class="header-buttons">
                 <button class="btn-solid">
                     <span class="btn-text">contact</span>
@@ -416,7 +416,7 @@
 <dialog id="contact-modal" class="text-dialog">
     <button class="close-modal-btn">✕</button>
     <h2>Contact</h2>
-    <form name="contact" method="POST" data-netlify="true">
+    <form name="contact" method="POST" netlify>
         <input type="text" name="name" placeholder="Name" required>
         <input type="email" name="email" placeholder="Email" required>
         <textarea name="message" placeholder="Message" rows="5"></textarea>
@@ -435,7 +435,7 @@
                 <p>High-impact visuals for beauty brands.</br></br>
                     With a foundation in photography and graphic design, I approach CGI through the principles of light,
                     composition, and visual clarity.</br>
-                    Every image and animation is designed to present products with high level of precision and elegance.
+                    Every image and animation is designed to present products with clarity, elegance, and complete creative control.
                 </p>
             </div>
         </div>
