@@ -417,6 +417,7 @@
     <button class="close-modal-btn">✕</button>
     <h2>Contact</h2>
     <form name="contact" method="POST" netlify>
+        <input type="hidden" name="form-name" value="contact">
         <input type="text" name="name" placeholder="Name" required>
         <input type="email" name="email" placeholder="Email" required>
         <textarea name="message" placeholder="Message" rows="5"></textarea>
@@ -440,6 +441,12 @@
             </div>
         </div>
 
+</dialog>
+
+<dialog id="success-modal" class="text-dialog">
+    <h2>Message Sent</h2>
+    <p>Thank you for reaching out. I'll get back to you soon.</p>
+    <button class="close-modal-btn" onclick="document.getElementById('success-modal').close()">Close</button>
 </dialog>
 
 <script>
@@ -522,6 +529,30 @@
         let prevIndex = (currentIndex - 1 + cards.length) % cards.length;
         loadVideo(prevIndex);
     });
+
+    const contactForm = document.querySelector('form[name="contact"]');
+const successModal = document.getElementById('success-modal');
+
+contactForm.addEventListener('submit', (e) => {
+    e.preventDefault(); // Stop page refresh
+
+    const formData = new FormData(contactForm);
+
+    fetch("/", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams(formData).toString(),
+    })
+    .then(() => {
+        // Close the contact modal and open the success modal
+        document.getElementById('contact-modal').close();
+        successModal.showModal();
+        contactForm.reset(); // Clear the form
+    })
+    .catch((error) => {
+        alert("Form submission failed. Please try again.");
+    });
+});
 </script>
 </body>
 </html>
