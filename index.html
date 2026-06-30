@@ -36,6 +36,28 @@
             margin-bottom: 16px;
         }
 
+        .form-actions {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-top: 8px;
+        }
+
+        .email-fallback {
+            margin: 0;
+            color: #888; /* Slightly muted color */
+            font-size: 13px;
+        }
+
+        .email-fallback a {
+            color: #EFEFEF;
+            text-decoration: underline;
+        }
+
+        .email-fallback a:hover {
+            color: #aaa;
+        }
+        
         .about-header {
             display: flex;
             align-items: center;
@@ -426,7 +448,10 @@
         <input type="text" name="name" placeholder="Name" required>
         <input type="email" name="email" placeholder="Email" required>
         <textarea name="message" placeholder="Message" rows="5"></textarea>
-        <button type="submit" class="btn-solid">Send</button>
+            <div class="form-actions">
+                <button type="submit" class="btn-solid">Send</button>
+                <p class="email-fallback">or email <a href="mailto:mikig3d@proton.me">mikig3d@proton.me</a></p>
+            </div>
     </form>
 </dialog>
 
